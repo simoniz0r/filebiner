@@ -27,20 +27,25 @@ uploadfile() {
         esac
     done
     argcheck "$UPLOAD_FILE"
-    # use readlink -f to find full path of UPLOAD_FILE
-    UPLOAD_FILE="$(readlink -f "$UPLOAD_FILE")"
-    # exit if file doesn't exist
-    if [[ ! -f "$UPLOAD_FILE" ]]; then
-        echo "$UPLOAD_FILE not found!"
-        exit 1
+    if [[ ! "$UPLOAD_FILE" == "-" ]]; then
+        # use readlink -f to find full path of UPLOAD_FILE
+        UPLOAD_FILE="$(readlink -f "$UPLOAD_FILE")"
+        # exit if file doesn't exist
+        if [[ ! -f "$UPLOAD_FILE" ]]; then
+            echo "$UPLOAD_FILE not found!"
+            exit 1
+        fi
     fi
     # set BIN_NAME to $USER if empty
     if [[ -z "$BIN_NAME" ]]; then
         BIN_NAME="$USER"
     fi
-    # get file name using rev and cut if FILE_NAME is empty
-    if [[ -z "$FILE_NAME" ]]; then
-        FILE_NAME="$(echo "$UPLOAD_FILE" | rev | cut -f1 -d'/' | rev)"
+    # if text being uploaded via pipe and FILE_NAME is empty, set random file name
+    if [[  "$UPLOAD_FILE" == "-" ]] && [[ -z "$FILE_NAME" ]]; then
+        FILE_NAME="paste-$RANDOM.txt"
+    # else get file name using rev and cut if FILE_NAME is empty
+    elif [[ -z "$FILE_NAME" ]]; then
+            FILE_NAME="$(echo "$UPLOAD_FILE" | rev | cut -f1 -d'/' | rev)"
     fi
     # upload UPLOAD_FILE to filebin.net
     curl -s --data-binary "@$UPLOAD_FILE" -H "bin: $BIN_NAME" -H "filename: $FILE_NAME" https://filebin.net 2>&1 > /dev/null || { echo "Failed to upload $UPLOAD_FILE"; exit 1; }
