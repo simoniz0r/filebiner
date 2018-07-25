@@ -1,5 +1,6 @@
 # filebiner
 A bash script that uploads and manages files on https://filebin.net
+Dependencies: curl
 
 ```
 Usage: filebiner <argument> [subarguments]
