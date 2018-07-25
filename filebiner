@@ -175,7 +175,6 @@ deletefile() {
         esac
     fi
     curl -s -X DELETE https://filebin.net/"$BIN_NAME"/"$FILE_NAME" || { echo "Failed to delete '$FILE_NAME' from '$BIN_NAME' bin!"; exit 1; }
-    echo "'$FILE_NAME' deleted from '$BIN_NAME' bin!"
     exit 0
 }
 # show filebiner help
