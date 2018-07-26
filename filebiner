@@ -39,6 +39,14 @@ uploadfile() {
     # set BIN_NAME to $USER if empty
     if [[ -z "$BIN_NAME" ]]; then
         BIN_NAME="$USER"
+        # if $USER isn't 8 characters, add 7 characters to it to make sure it's long enough
+        if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+            BIN_NAME="$USER-uploads"
+        fi
+    fi
+    if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+        echo "Error using '$BIN_NAME' as bin name; bin name must be at least 8 characters in length."
+        exit 1
     fi
     # if text being uploaded via pipe and FILE_NAME is empty, set random file name
     if [[  "$UPLOAD_FILE" == "-" ]] && [[ -z "$FILE_NAME" ]]; then
@@ -74,6 +82,10 @@ listfiles() {
     if [[ -z "$BIN_NAME" ]]; then
         BIN_NAME="$USER"
     fi
+    if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+        echo "Error using '$BIN_NAME' as bin name; bin name must be at least 8 characters in length."
+        exit 1
+    fi
     # use curl to get list, grep to find file urls, and cut to get rid of extra junk
     echo "Files in '$BIN_NAME' bin:"
     if [[ "$SHOW_NAMES" == "TRUE" ]]; then
@@ -103,6 +115,14 @@ downloadfile() {
         # set BIN_NAME to $USER if empty
         if [[ -z "$BIN_NAME" ]]; then
             BIN_NAME="$USER"
+            # if $USER isn't 8 characters, add 7 characters to it to make sure it's long enough
+            if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+                BIN_NAME="$USER-uploads"
+            fi
+        fi
+        if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+            echo "Error using '$BIN_NAME' as bin name; bin name must be at least 8 characters in length."
+            exit 1
         fi
         # set SAVE_NAME to ~/Downloads/$FILE_NAME if empty
         if [[ -z "$SAVE_NAME" ]]; then
@@ -129,6 +149,14 @@ downloadall() {
     # set BIN_NAME to $USER if empty
     if [[ -z "$BIN_NAME" ]]; then
         BIN_NAME="$USER"
+        # if $USER isn't 8 characters, add 7 characters to it to make sure it's long enough
+        if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+            BIN_NAME="$USER-uploads"
+        fi
+    fi
+    if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+        echo "Error using '$BIN_NAME' as bin name; bin name must be at least 8 characters in length."
+        exit 1
     fi
     # set FILE_NAME to $USER if empty
     if [[ -z "$FILE_NAME" ]]; then
@@ -175,6 +203,14 @@ deletefile() {
     # set BIN_NAME to $USER if empty
     if [[ -z "$BIN_NAME" ]]; then
         BIN_NAME="$USER"
+        # if $USER isn't 8 characters, add 7 characters to it to make sure it's long enough
+        if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+            BIN_NAME="$USER-uploads"
+        fi
+    fi
+    if [[ $(echo "$BIN_NAME" | wc -m) -lt 9 ]]; then
+        echo "Error using '$BIN_NAME' as bin name; bin name must be at least 8 characters in length."
+        exit 1
     fi
     # ask if sure about deleting file if -y or --yes not passed
     if [[ "$YES_TO_ALL" == "FALSE" ]]; then
@@ -189,7 +225,7 @@ deletefile() {
 }
 # show filebiner help
 filebinerhelp() {
-printf "filebiner v0.0.2 - https://www.simonizor.net
+printf "filebiner v0.0.3 - https://www.simonizor.net
 Uploads and manages files on https://filebin.net
 
 Usage: filebiner <argument> [subarguments]
