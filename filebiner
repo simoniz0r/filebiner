@@ -71,6 +71,9 @@ uploadfile() {
         exit 1
     else
         echo "url: $UP_URL"
+        if type xclip > /dev/null 2>&1; then
+            echo -n "$UP_URL" | xclip -i -selection clipboard
+        fi
     fi
     exit 0
 }
